@@ -1,7 +1,114 @@
+<!DOCTYPE html>
 <html>
     <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     </head>
+    
     <body>
-        <button>click me!<button>
+    
+    <h1 id="title">CLICK BELOW</h1>
+    <button class="btn btn-regular" style ="background:lightblue;font-weight:bold;color:black;" onclick="pvp()">PVP</button>
+    <h2 id="battle">battle</h2>
+    <script>
+    function changeText() {
+      document.getElementById("title").innerText = "You clicked!";
+    }
+    var ninehead = {
+        name: "Ninehead",
+        hp:100,
+        attack:15,
+        critChance:0.5,
+        dexterity: 5,
+        dodgeChance: 0.7
+    }
+    var homaning = {
+        name: "Homaning",
+        hp:100,
+        attack:20,  
+        critChance: 0.1,
+        dodgeChance : 0
+    }
+    var doogli = {
+        name: "Doogli",
+        hp:80,
+        attack:10,
+        critChance:0.1,
+        dodgeChance:0.5
+    }
+    var characters = {
+        ninehead: ninehead,
+        homaning: homaning,
+        doogli: doogli
+    }
+    var curCritChance = 0
+    var critDamMulti = 1.5
+    var curDodgeChance = 0
+    console.log("--------------")
+    function battle(p1,p2){
+        while(p1.hp != 0 && p2.hp != 0){
+            curCritChance = Math.random();
+            curDodgeChance = Math.random();
+            if(curDodgeChance >= p1.dodgeChance){
+                if(curCritChance <= p1.critChance){
+                    console.log(p2.name+" CRITICAL HIT!")
+                    p1.hp -= p2.attack*critDamMulti;
+                }else{
+                    p1.hp -= p2.attack;
+                }
+            }else{
+                console.log(p1.name +" Dodged!")
+            }
+            if(p1.hp <= 0) {
+                p1.hp = 0;
+                console.log("Player 1 Hp: "+ p1.hp);
+                break;
+            }
+            curCritChance = Math.random();
+            curDodgeChance = Math.random();
+            if(curDodgeChance >= p2.dodgeChance){
+                if(curCritChance <= p2.critChance){
+                    console.log(p1.name+" CRITICAL HIT!")
+                    p2.hp -= p1.attack*critDamMulti;
+                }else{
+                    p2.hp -= p1.attack;
+                }
+            }else{
+                console.log(p2.name +" Dodged!")
+            }
+            if(p2.hp <=0) {
+                p2.hp = 0;
+                console.log("Player 2 Hp: " + p2.hp);
+                break;
+            } 
+            console.log("Player 1 Hp: "+ p1.hp);
+            console.log("Player 2 Hp: "+ p2.hp);
+        }
+        if(p1.hp == 0){
+            document.getElementById("battle").innerText = `Player 2 (${p2.name}) wins!`;
+        }
+        if(p2.hp == 0){
+            document.getElementById("battle").innerText = `Player 1 (${p1.name}) wins!`;
+        }
+        console.log("-----------")
+    }
+    
+    function pvp(){
+        var proceed = true;
+        do{
+            console.log("FIGHT!");
+            do {
+                var p1CharChoice = prompt("P1 Character? ").toLowerCase();
+            } while(p1CharChoice != "ninehead" && p1CharChoice != "homaning" && p1CharChoice != "doogli")
+            do{
+                var p2CharChoice = prompt("P2 Character? ").toLowerCase();
+            } while(p2CharChoice != "ninehead" && p2CharChoice != "homaning" && p2CharChoice != "doogli" || p2CharChoice == p1CharChoice)
+            p1CharChoice = {...characters[p1CharChoice]}
+            p2CharChoice = {...characters[p2CharChoice]}
+            battle(p1CharChoice,p2CharChoice)
+            proceed = (prompt("Enter Y to Continue: ").toUpperCase()=="Y")
+        }while(proceed == true)
+    }
+    </script>
+    
     </body>
 </html>
